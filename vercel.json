@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "ar-street-sign-webxr-lagree",
+  "name": "ar-street-sign-webxr-core-strength-espresso",
   "rewrites": [
     { "source": "/", "destination": "/index.html" }
   ],

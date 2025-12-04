@@ -1,55 +1,176 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lagree AR — Street Sign (WebXR)</title>
+  <title>Core Strength + Espresso AR — Street Sign (WebXR)</title>
 
   <!-- Model Viewer (single engine) -->
   <script type="module" src="https://unpkg.com/@google/model-viewer@^3.4.0/dist/model-viewer.min.js"></script>
 
   <style>
     :root {
-      --bg: #000; --fg: #fff; --muted: #bfc7cc; --glass: rgba(0,0,0,.75);
-      --pad: 16px; --gap: 12px; --rad: 12px; --shadow: 0 10px 24px rgba(0,0,0,.35);
+      --bg: #000;
+      --fg: #fff;
+      --muted: #bfc7cc;
+      --glass: rgba(0, 0, 0, .75);
+      --pad: 16px;
+      --gap: 12px;
+      --rad: 12px;
+      --shadow: 0 10px 24px rgba(0, 0, 0, .35);
       --font: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
-    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); }
-    .app { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-    header { position: fixed; top:0; left:0; right:0; z-index:10; display:flex; align-items:center; justify-content:center; padding: 10px var(--pad); background: rgba(0,0,0,.6); backdrop-filter: blur(8px); }
-    header .title { font-weight: 600; font-size: 0.95rem; }
-    model-viewer { width: 100%; height: 100%; display: block; background: var(--bg); --poster-color: transparent; }
-    .panel { position: fixed; left: 50%; bottom: 76px; transform: translateX(-50%); background: var(--glass); border:1px solid rgba(255,255,255,.18); border-radius: var(--rad); padding: var(--pad); text-align:center; z-index: 10; }
-    .row { display:flex; align-items:center; gap: var(--gap); justify-content:center; }
-    label { font-size: .85rem; color: var(--muted); }
-    input[type="range"] { width: 220px; height: 6px; background: rgba(255,255,255,.18); border-radius:999px; -webkit-appearance: none; appearance: none; }
-    input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#fff; }
-    .ar-cta { position: fixed; right: var(--pad); bottom: var(--pad); z-index: 1000; pointer-events: auto; }
-    .btn { background:#fff; color:#000; border:none; border-radius: 10px; padding: 10px 16px; font-weight:600; box-shadow: var(--shadow); cursor:pointer; }
-    .loader { position: fixed; inset:0; display:grid; place-items:center; background: rgba(0,0,0,.85); z-index: 100; }
-    .loader[hidden] { display: none !important; pointer-events: none !important; }
-    .loader-inner { text-align:center; border:1px solid rgba(255,255,255,.2); border-radius:12px; padding: 16px 20px; background: rgba(0,0,0,.6); }
-    .muted { color: var(--muted); font-size: .9rem }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+    }
+
+    .app {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px var(--pad);
+      background: rgba(0, 0, 0, .6);
+      backdrop-filter: blur(8px);
+    }
+
+    header .title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: var(--bg);
+      --poster-color: transparent;
+    }
+
+    .panel {
+      position: fixed;
+      left: 50%;
+      bottom: 76px;
+      transform: translateX(-50%);
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: var(--rad);
+      padding: var(--pad);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: var(--gap);
+      justify-content: center;
+    }
+
+    label {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    input[type="range"] {
+      width: 220px;
+      height: 6px;
+      background: rgba(255, 255, 255, .18);
+      border-radius: 999px;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .ar-cta {
+      position: fixed;
+      right: var(--pad);
+      bottom: var(--pad);
+      z-index: 1000;
+      pointer-events: auto;
+    }
+
+    .btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+
+    .loader {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, .85);
+      z-index: 100;
+    }
+
+    .loader[hidden] {
+      display: none !important;
+      pointer-events: none !important;
+    }
+
+    .loader-inner {
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 12px;
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, .6);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: .9rem
+    }
   </style>
 </head>
+
 <body>
   <div class="app">
-    <header><div class="title">Lagree AR — Street Sign (WebXR)</div></header>
+    <header>
+      <div class="title">Core Strength + Espresso AR — Street Sign (WebXR)</div>
+    </header>
 
     <!-- Single model-viewer instance: preview + AR -->
-    <model-viewer id="mv" style="touch-action: none;"
-      src="./AR-Sandwhich-board-upright.glb"
-      ios-src="./AR-Sandwhich-board-upright.usdz#callToAction=Visit%20Site&checkoutURL=https%3A%2F%2Flagreecorestrength.com%2F"
-      alt="Lagree Street Sign"
-      ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor"
-      camera-controls
-      autoplay animation-name="Animation" animation-crossfade-duration="250"
+    <model-viewer id="mv" style="touch-action: none;" src="./CSE-AR-SIGN-NOV-2025.glb"
+      ios-src="./CSE-AR-SIGN-NOV-2025.usdz#callToAction=Visit%20Site&checkoutURL=https%3A%2F%2Fcorestrengthespresso.com%2F"
+      alt="Core Strength + Espresso Street Sign" ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto"
+      ar-placement="floor" camera-controls autoplay animation-name="Animation" animation-crossfade-duration="250"
       environment-image="neutral" xr-environment>
 
       <!-- Hotspot aligned to banner (initial guess; tweak via ?hx=&hy=&hz=) -->
-      <button id="hotspotBanner" slot="hotspot-banner" class="btn"
-        data-position="0 -0.0013 0.964" data-normal="0 0 -1" data-visibility-attribute="visible"
-        style="padding:6px 10px; font-size:.8rem;">Tap to Learn More</button>
+      <button id="hotspotBanner" slot="hotspot-banner" class="btn" data-position="0 -0.0013 0.964" data-normal="0 0 -1"
+        data-visibility-attribute="visible" style="padding:6px 10px; font-size:.8rem;">Tap to Learn More</button>
 
       <button slot="ar-button" class="btn">👁️ View in AR</button>
     </model-viewer>
@@ -99,7 +220,7 @@
     // Explicit AR button (helps some browsers)
     document.getElementById('enterAR').addEventListener('click', () => mv.activateAR());
     document.getElementById('visitSite').addEventListener('click', () => {
-      const url = 'https://lagreecorestrength.com/';
+      const url = 'https://corestrengthespresso.com/';
       const w = window.open(url, '_blank', 'noopener');
       if (!w) location.href = url; // fallback if popup blocked
     });
@@ -107,7 +228,7 @@
     // Hotspot: open site; allow quick tuning via query (?hx=&hy=&hz= meters)
     const hotspot = document.getElementById('hotspotBanner');
     hotspot.addEventListener('click', () => {
-      const url = 'https://lagreecorestrength.com/';
+      const url = 'https://corestrengthespresso.com/';
       const w = window.open(url, '_blank', 'noopener');
       if (!w) location.href = url;
     });
@@ -139,14 +260,14 @@
       try {
         const orbit = mv.getCameraOrbit(); // {theta, phi, radius}
         const theta = orbit.theta; // degrees; 0 = +Z (front)
-        const front = Math.cos(theta * Math.PI/180) >= 0; // facing front
+        const front = Math.cos(theta * Math.PI / 180) >= 0; // facing front
         const pos = hotspot.dataset.position.split(' ').map(Number);
         // Assume Z axis depth; flip sign based on camera side
         const z = Math.abs(pos[2]) * (front ? 1 : -1);
         const normalZ = front ? -1 : 1;
         hotspot.dataset.position = `${pos[0]} ${pos[1]} ${z.toFixed(3)}`;
         hotspot.dataset.normal = `0 0 ${normalZ}`;
-      } catch {}
+      } catch { }
     }
     mv.addEventListener('camera-change', updateHotspotSide);
     mv.addEventListener('load', updateHotspotSide);
@@ -184,7 +305,7 @@
         // Simple mapping: pixels → world units based on orbit radius
         const r = orbit.radius; const k = r * 0.002; // tune factor
         mv.cameraTarget = `${(target.x - dx * k).toFixed(3)} ${(target.y + dy * k).toFixed(3)} ${target.z.toFixed(3)}`;
-      } catch {}
+      } catch { }
     }
 
     mv.addEventListener('pointerdown', (e) => {
@@ -220,4 +341,5 @@
     mv.addEventListener('touchend', () => { if (pinchBase) { pinchBase = 0; } }, { passive: true });
   </script>
 </body>
+
 </html>
